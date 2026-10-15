@@ -1,0 +1,4 @@
+member_id,start_node_id,end_node_id
+m1,001,002
+m2,002,003
+m3,003,001
