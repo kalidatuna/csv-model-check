@@ -13,6 +13,25 @@ python3 -m unittest -v
 
 Exit code 0 means these input checks passed. Exit code 1 means errors were found. Both input files remain unchanged. All included data is synthetic.
 
+## Save and read a JSON report
+
+Redirect standard output to a separate file to save the report:
+
+```sh
+python3 model_check.py examples/nodes.csv examples/members.csv > report.json
+```
+
+The command still exits with code 1 when validation finds errors, and writes the JSON diagnostics to `report.json`. Choose an output path different from either input CSV: shell redirection overwrites the output file before the checker runs.
+
+| Report field | Meaning |
+| --- | --- |
+| `ok` | True only when no validation errors were found. |
+| `valid_nodes` | Number of unique nodes with valid identifiers and finite coordinates. |
+| `valid_members` | Number of unique members with valid identifiers, existing endpoints, and nonzero length. |
+| `errors` | List of diagnostics, each with `file`, `line`, `code`, and `message`. |
+
+A diagnostic's `file` is the input basename. Its `line` is the physical line where the CSV record ends, or `null` for file-level errors and empty-model checks. Valid counts can be nonzero even when `ok` is false; check `ok` or the exit code before loading data into a later analysis.
+
 ## Input contract
 
 | File | Required columns | Meaning |
